@@ -12,7 +12,7 @@ function removeTodoHandler(state, action) {
 
 function editTodoHandler(state, action) {
    const newTodo = action.payload;
-   state.map((item) => {
+   return state.map((item) => {
       if(item.id === newTodo.id) {
          return newTodo;
       }
@@ -20,7 +20,7 @@ function editTodoHandler(state, action) {
    })
 }
 const todoSlice = createSlice({
-   name: 'todoSlice',
+   name: 'todosSlice',
    initialState: [],
    reducers: {
       addTodo: addTodoHandler,

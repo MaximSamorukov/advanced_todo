@@ -1,33 +1,22 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-function addTodoHandler(state, action) {
-   const todo = action.payload;
-   state.push(todo);
+function emptyCurrentTodoFn(state, action) {
+   state = {}
+   return state;
 }
 
-function removeTodoHandler(state, action) {
-   const { id } = action.payload;
-   state.filter((item) => item !== id);
-}
-
-function editTodoHandler(state, action) {
-   const newTodo = action.payload;
-   state.map((item) => {
-      if(item.id === newTodo.id) {
-         return newTodo;
-      }
-      return item;
-   })
+function editCurrentTodoFn(state, action) {
+   state = action.payload;
+   return state;
 }
 const todoSlice = createSlice({
-   name: 'todoSlice',
-   initialState: [],
+   name: 'currentTodoSlice',
+   initialState: {},
    reducers: {
-      addTodo: addTodoHandler,
-      removeTodo: removeTodoHandler,
-      editTodo: editTodoHandler,
+      emptyCurrentTodo: emptyCurrentTodoFn,
+      editCurrentTodo: editCurrentTodoFn,
    },
 });
 
-export const { addTodo, removeTodo, editTodo } = todoSlice.actions;
+export const { emptyCurrentTodo, editCurrentTodo } = todoSlice.actions;
 export default todoSlice.reducer;

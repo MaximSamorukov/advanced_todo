@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect, useCallback } from "react";
 import s from '../App.module.scss';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
@@ -7,11 +7,16 @@ import MenuItem from '@mui/material/MenuItem';
 import preview from './styles/preview.module.scss';
 import { useDispatch, useSelector } from "react-redux";
 import { addTodo, editTodo, removeTodo } from "../store/slices/todos";
+import { emptyCurrentTodo, editCurrentTodo } from "../store/slices/todo";
 import { validate } from "../functions";
+import _ from "lodash";
 
 const PreviewContainer = () => {
    const [todoObject, setTodoObject] = useState({});
    const todos = useSelector((s) => s.todos);
+   const currentTodo = useSelector((s) => s.todo);
+
+   const isThereNoChanges = useMemo(() => _.isEqual(currentTodo, todoObject), [currentTodo, todoObject]);
    const dispatch = useDispatch();
 
    const newTodoObject = {
@@ -23,8 +28,13 @@ const PreviewContainer = () => {
       sphere: '',
    };
 
+   const editCurrentTodoFunction = useCallback((item) => dispatch(editCurrentTodo(item)), [dispatch]);
+
+   const emptyCurrentTodoFunction = () => dispatch(emptyCurrentTodo());
+
    const createNewTodoObject = () => {
       setTodoObject(() => ({ ...newTodoObject, id: new Date().valueOf() }));
+      editCurrentTodoFunction({ ...newTodoObject, id: new Date().valueOf() });
    };
 
    const toggleStatus = () => setTodoObject((prev) => ({...prev, completed: !prev.completed }));
@@ -35,9 +45,11 @@ const PreviewContainer = () => {
       } else {
          dispatch(addTodo(todoItem));
       }
+      editCurrentTodoFunction(todoItem);
    }
 
    const removeTodoHandler = (todoId) => dispatch(removeTodo({ id: todoId }));
+
    const editTodoFields = ({ name, value }) => setTodoObject((prev) => ({...prev, [name]: value }));
    const onChangeField = (v) => {
       editTodoFields({
@@ -49,11 +61,12 @@ const PreviewContainer = () => {
    useEffect(() => {
       if(!todoObject.id) {
          setTodoObject(() => ({ id: new Date().valueOf(), completed: false }));
+         editCurrentTodoFunction({ id: new Date().valueOf(), completed: false });
       }
-   }, [todoObject.id]);
+   }, [todoObject.id, editCurrentTodoFunction]);
 
    const validationRules = useMemo(() => ({
-      title: 'required|min:7',
+      title: 'required|min:7|max:40',
       sphere: 'required|not_in:select',
       from: 'required',
       to: 'required',
@@ -72,6 +85,17 @@ const PreviewContainer = () => {
    },[todoObject]);
 
    const inputsAreValid = useMemo(() => validate(todoObject, validationRules), [todoObject, validationRules]);
+
+   const spheresTypes = useMemo(() => (
+      [
+         { value: 'select', label: 'Select the life area' },
+         { value: 'personal', label: 'Личная' },
+         { value: 'business', label: 'Бизнес' },
+         { value: 'health', label: 'Здоровье' },
+         { value: 'family', label: 'Семья' },
+         { value: 'sport', label: 'Спорт' },
+      ]
+   ), []);
 
    return (
       <div className={s.preview_container}>
@@ -92,7 +116,7 @@ const PreviewContainer = () => {
                   Создать
                </Button>
                <Button
-                  disabled={!inputsAreValid}
+                  disabled={!inputsAreValid || isThereNoChanges}
                   variant="contained"
                   onClick={(() => editTodoHandler(todoObject))}
                >
@@ -116,7 +140,7 @@ const PreviewContainer = () => {
                   value={todoObject.title}
                   name="title"
                   id="title"
-                  label="Todo title, (min 7 chr)"
+                  label="Todo title, (min:7, max:40)"
                   variant="outlined"
                   color="secondary"
                   onChange={onChangeField}
@@ -133,13 +157,9 @@ const PreviewContainer = () => {
                   variant="outlined"
                   color="secondary"
                   onChange={onChangeField}
-               >
-                  <MenuItem value='select'>Select the life area</MenuItem>
-                  <MenuItem value='personal'>Личная</MenuItem>
-                  <MenuItem value='business'>Бизнес</MenuItem>
-                  <MenuItem value='health'>Здоровье</MenuItem>
-                  <MenuItem value='family'>Семья</MenuItem>
-                  <MenuItem value='sport'>Спорт</MenuItem>
+               >  {spheresTypes.map((item) => (
+                     <MenuItem value={item.value}>{item.label}</MenuItem>
+                  ))}
                </TextField>
             </div>
 

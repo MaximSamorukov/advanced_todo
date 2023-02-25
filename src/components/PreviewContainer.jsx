@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addTodo, editTodo, removeTodo } from "../store/slices/todos";
 import { emptyCurrentTodo, editCurrentTodo } from "../store/slices/todo";
 import { validate } from "../functions";
+import { spheresTypes } from '../dictionaries';
 import _ from "lodash";
 
 const PreviewContainer = () => {
@@ -67,7 +68,7 @@ const PreviewContainer = () => {
 
    const validationRules = useMemo(() => ({
       title: 'required|min:7|max:40',
-      sphere: 'required|not_in:select',
+      sphere: 'required|not_in:SELECT',
       from: 'required',
       to: 'required',
       id: 'required',
@@ -86,16 +87,9 @@ const PreviewContainer = () => {
 
    const inputsAreValid = useMemo(() => validate(todoObject, validationRules), [todoObject, validationRules]);
 
-   const spheresTypes = useMemo(() => (
-      [
-         { value: 'select', label: 'Select the life area' },
-         { value: 'personal', label: 'Личная' },
-         { value: 'business', label: 'Бизнес' },
-         { value: 'health', label: 'Здоровье' },
-         { value: 'family', label: 'Семья' },
-         { value: 'sport', label: 'Спорт' },
-      ]
-   ), []);
+   const spheresTypesArray = useMemo(() => {
+      return Object.entries(spheresTypes).map(([value, label]) => ({ value, label }));
+   }, []);
 
    return (
       <div className={s.preview_container}>
@@ -152,12 +146,12 @@ const PreviewContainer = () => {
                   className={preview.sphere}
                   label="Life area"
                   id="sphere"
-                  value={todoObject.sphere || 'select'}
+                  value={todoObject.sphere || 'SELECT'}
                   name="sphere"
                   variant="outlined"
                   color="secondary"
                   onChange={onChangeField}
-               >  {spheresTypes.map((item) => (
+               >  {spheresTypesArray.map((item) => (
                      <MenuItem value={item.value}>{item.label}</MenuItem>
                   ))}
                </TextField>

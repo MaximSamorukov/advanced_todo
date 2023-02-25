@@ -1,4 +1,4 @@
-# Getting Started with Create React App
+# Приложение Todo с расширенным функционалом
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

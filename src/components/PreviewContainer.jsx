@@ -29,9 +29,14 @@ const PreviewContainer = () => {
       sphere: '',
    };
 
-   const editCurrentTodoFunction = useCallback((item) => dispatch(editCurrentTodo(item)), [dispatch]);
+   useEffect(() => {
+      if (!isThereNoChanges) {
+         setTodoObject(currentTodo);
+      }
+   // eslint-disable-next-line react-hooks/exhaustive-deps
+   }, [currentTodo]);
 
-   const emptyCurrentTodoFunction = () => dispatch(emptyCurrentTodo());
+   const editCurrentTodoFunction = useCallback((item) => dispatch(editCurrentTodo(item)), [dispatch]);
 
    const createNewTodoObject = () => {
       setTodoObject(() => ({ ...newTodoObject, id: new Date().valueOf() }));
@@ -49,7 +54,10 @@ const PreviewContainer = () => {
       editCurrentTodoFunction(todoItem);
    }
 
-   const removeTodoHandler = (todoId) => dispatch(removeTodo({ id: todoId }));
+   const removeTodoHandler = (todoId) => {
+      dispatch(removeTodo({ id: todoId }));
+      createNewTodoObject();
+   };
 
    const editTodoFields = ({ name, value }) => setTodoObject((prev) => ({...prev, [name]: value }));
    const onChangeField = (v) => {

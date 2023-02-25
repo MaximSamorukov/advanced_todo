@@ -7,7 +7,7 @@ function addTodoHandler(state, action) {
 
 function removeTodoHandler(state, action) {
    const { id } = action.payload;
-   state.filter((item) => item !== id);
+   return state.filter((item) => item.id !== id);
 }
 
 function editTodoHandler(state, action) {

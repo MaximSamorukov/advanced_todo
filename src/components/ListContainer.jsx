@@ -5,7 +5,7 @@ import { TodoItemCard } from "./todoItemCard/todoItemCard";
 
 const ListContainer = () => {
    const todos = useSelector((store) => store.todos);
-   console.log(todos);
+
    return (
       <div className={s.list_container}>
          <div className={s.list_header}>Todos list</div>

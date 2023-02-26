@@ -4,10 +4,11 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
+import { FilterContainer } from "./FilterContainer";
 import preview from './styles/preview.module.scss';
 import { useDispatch, useSelector } from "react-redux";
 import { addTodo, editTodo, removeTodo } from "../store/slices/todos";
-import { emptyCurrentTodo, editCurrentTodo } from "../store/slices/todo";
+import { editCurrentTodo } from "../store/slices/todo";
 import { validate } from "../functions";
 import { spheresTypes } from '../dictionaries';
 import _ from "lodash";
@@ -150,8 +151,8 @@ const PreviewContainer = () => {
                <TextField
                   select
                   required
-                  defaultValue="select"
-                  className={preview.sphere}
+                  defaultValue="SELECT"
+                  className={`${preview.sphere} ${s[todoObject.sphere]}`}
                   label="Life area"
                   id="sphere"
                   value={todoObject.sphere || 'SELECT'}
@@ -168,6 +169,7 @@ const PreviewContainer = () => {
             <div className={preview.card_inputs}>
                <TextField
                   required
+                  color="secondary"
                   type="date"
                   label="From"
                   name="from"
@@ -180,6 +182,7 @@ const PreviewContainer = () => {
                />
                <TextField
                   required
+                  color="secondary"
                   type="date"
                   className={preview.sphere}
                   label="To"
@@ -207,6 +210,7 @@ const PreviewContainer = () => {
                />
             </div>
          </div>
+         <FilterContainer />
       </div>
    )
 }

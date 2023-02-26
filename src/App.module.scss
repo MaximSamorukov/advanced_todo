@@ -1,10 +1,11 @@
+@import './variables.scss';
+
 .app {
   width: 1000px;
   display: flex;
   flex-direction: row;
   justify-content: space-around;
   align-items: flex-start;
-  background-color: white;
   margin-right: auto;
   margin-left: auto;
   height: 100%;
@@ -20,9 +21,18 @@
   justify-content: flex-start;
   flex-direction: column;
   align-items: flex-start;
-  background-color: rgb(175, 255, 166);
+  background-color: white;
 }
 
+.filter_container {
+  width: 100%;
+  box-sizing: border-box;
+  height: auto;
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  align-items: flex-start;
+}
 .list_container {
   width: 35%;
   box-sizing: border-box;
@@ -32,6 +42,7 @@
   height: 100vh;
   padding-left: 4px;
   padding-right: 4px;
+  background-color: white;
 }
 
 .list_header {
@@ -45,6 +56,30 @@
 
 .list {
   width: 100%;
-  height: auto;
+  height: 90vh;
   overflow-y: scroll;
+}
+
+.SELECT {
+  background-color: $SELECT;
+}
+
+.PERSONAL {
+  background-color: $PERSONAL;
+}
+
+.BUSINESS {
+  background-color: $BUSINESS;
+}
+
+.HEALTH {
+  background-color: $HEALTH;
+}
+
+.FAMILY {
+  background-color: $FAMILY;
+}
+
+.SPORT {
+  background-color: $SPORT;
 }

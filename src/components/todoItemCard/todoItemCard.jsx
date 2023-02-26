@@ -12,7 +12,7 @@ export const TodoItemCard = ({ item }) => {
    };
 
    return (
-      <div className={s.card_container} onClick={setCurrentTodo}>
+      <div className={`${s.card_container} ${s[sphere]}`} onClick={setCurrentTodo}>
          <div className={s.card_body}>
             <div className={s.item}>
                <div className={s.item_name}>Title:</div>

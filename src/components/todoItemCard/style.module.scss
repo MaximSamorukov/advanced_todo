@@ -1,3 +1,4 @@
+@import '../../variables.scss';
 
 .card_container {
    width: 100%;
@@ -7,12 +8,40 @@
    align-items: center;
    flex-direction: column;
    height: min-content;
-   background-color: rgb(255, 208, 120);
+   background-color: white;
    border-radius: 10px;
    box-sizing: border-box;
    overflow: hidden;
-   padding: 5px;
+   padding-left: 15px;
+   padding-right: 15px;
+   padding-top: 15px;
+   padding-bottom: 10px;
 }
+
+.SELECT {
+   background-color: $SELECT;
+}
+
+.PERSONAL {
+   background-color: $PERSONAL;
+}
+
+.BUSINESS {
+   background-color: $BUSINESS;
+}
+
+.HEALTH {
+   background-color: $HEALTH;
+}
+
+.FAMILY {
+   background-color: $FAMILY;
+}
+
+.SPORT {
+   background-color: $SPORT;
+}
+
 
 .card_body {
    display: flex;
@@ -29,15 +58,14 @@
    display: flex;
    justify-content: flex-start;
    align-items: center;
+   border-bottom: 1px solid gray;
 }
 
 .item_name {
-   width: 30%;
+   width: 35%;
    min-width: 30%;
-   height: 30px;
 }
 
 .item_value {
-   width: 70%;
-   height: 30px;
+   width: 65%;
 }

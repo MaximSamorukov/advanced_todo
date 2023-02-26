@@ -20,16 +20,16 @@ const FilterContainer = () => {
    const todos = useSelector((s) => s.todos);
    const filters = useSelector((s) => s.filter);
    const { original, current } = filters;
-   console.log(filters)
+
    const currentTodoSpheres = useMemo(() => todos.reduce((acc, i) => {
       if (!acc.includes(i.sphere)) {
          acc.push(i.sphere);
          return acc;
       }
+      return acc;
    }, []), [todos]);
 
    useEffect(() => {
-      console.log('hey', currentTodoSpheres);
       dispatch(addFilterTypes(currentTodoSpheres));
    }, [currentTodoSpheres, todos, dispatch])
 

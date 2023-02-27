@@ -5,16 +5,15 @@ import s from './style.module.scss';
 const FilterItem = ({ name, label, active, toggleFilter, current }) => {
    return (
       <div className={s.filter_item_container}>
-         <div className={s.filter_item}>
+         <div className={`${s.filter_item} ${active && s.active}`}>
             <Checkbox
                className={s.filter_checkbox}
-               disabled={true}
+               disabled={!active}
                label={label}
                name={name}
                sx={{ '& .MuiSvgIcon-root': { fontSize: 28 } }}
                checked={current?.includes(name)}
                onChange={(e) => {
-                  console.log(e.target.checked);
                   toggleFilter(name, e.target.checked ? 'add' : 'remove' );
                }}
             />

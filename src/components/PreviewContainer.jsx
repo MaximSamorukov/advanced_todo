@@ -9,6 +9,7 @@ import preview from './styles/preview.module.scss';
 import { useDispatch, useSelector } from "react-redux";
 import { addTodo, editTodo, removeTodo } from "../store/slices/todos";
 import { editCurrentTodo } from "../store/slices/todo";
+import { removeFilterType, addFilterType, updateFilterType } from '../store/slices/filter';
 import { validate } from "../functions";
 import { spheresTypes } from '../dictionaries';
 import _ from "lodash";
@@ -38,7 +39,9 @@ const PreviewContainer = () => {
    }, [currentTodo]);
 
    const editCurrentTodoFunction = useCallback((item) => dispatch(editCurrentTodo(item)), [dispatch]);
-
+   const updateFiltersOnAddItem = useCallback((item, todos) => dispatch(addFilterType({ item, todos })), [dispatch]);
+   const updateFiltersOnSaveItem = useCallback((item, todos) => dispatch(updateFilterType({ item, todos })), [dispatch]);
+   const updateFilterOnRemoveItem = useCallback((id, todos) => dispatch(removeFilterType({ id, todos })), [dispatch]);
    const createNewTodoObject = () => {
       setTodoObject(() => ({ ...newTodoObject, id: new Date().valueOf() }));
       editCurrentTodoFunction({ ...newTodoObject, id: new Date().valueOf() });
@@ -49,8 +52,10 @@ const PreviewContainer = () => {
    const editTodoHandler = (todoItem) => {
       if (todos.find((item) => item.id === todoObject.id)) {
          dispatch(editTodo(todoItem));
+         updateFiltersOnSaveItem(todoItem, todos);
       } else {
          dispatch(addTodo(todoItem));
+         updateFiltersOnAddItem(todoItem, todos);
       }
       editCurrentTodoFunction(todoItem);
    }
@@ -58,6 +63,7 @@ const PreviewContainer = () => {
    const removeTodoHandler = (todoId) => {
       dispatch(removeTodo({ id: todoId }));
       createNewTodoObject();
+      updateFilterOnRemoveItem(todoId, todos);
    };
 
    const editTodoFields = ({ name, value }) => setTodoObject((prev) => ({...prev, [name]: value }));

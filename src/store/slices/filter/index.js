@@ -1,14 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { spheresTypes } from "../../../dictionaries";
+import { getCurrentTodoTypes } from "../../../functions";
 
 function addTypeFunction(state, action) {
-   const type = action.payload;
-   const { current } = state;
-   if (!current.includes(type)) {
-      const newCurrent = current.push(type);
-      state.current = newCurrent;
-      return state;
-   }
+   const { item, todos } = action.payload;
+   const currentTypes = getCurrentTodoTypes([...todos, item]);
+   state.current = currentTypes;
+   return state;
+}
+
+function updateTypeFunction(state, action) {
+   const { item, todos } = action.payload;
+   const currentTypes = getCurrentTodoTypes(todos.map((i) => i.id === item.id ? item : i));
+   state.current = currentTypes;
    return state;
 }
 
@@ -20,10 +24,24 @@ function addTypesFunction(state, action) {
 
 
 function removeTypeFunction(state, action) {
-   const type = action.payload;
+   const { id, todos } = action.payload;
+   const currentTypes = getCurrentTodoTypes(todos.filter((i) => i.id !== id));
+   state.current = currentTypes;
+   return state;
+}
+
+function updateCurrentFilterFunction(state, action) {
    const { current } = state;
-   const newCurrent = current.filter((i) => i !== type)
-   state.current = newCurrent;
+   const { operation, type } = action.payload;
+   if (operation === 'add' && !current.includes(type)) {
+      current.push(type);
+      return state;
+   }
+   if (operation === 'remove' && current.includes(type)) {
+      const newCurrent = current.filter((i) => i !== type);
+      state.current = newCurrent;
+      return state;
+   }
    return state;
 }
 
@@ -39,10 +57,12 @@ const todoSlice = createSlice({
    initialState,
    reducers: {
       addFilterType: addTypeFunction,
+      updateFilterType: updateTypeFunction,
       addFilterTypes: addTypesFunction,
       removeFilterType: removeTypeFunction,
+      updateCurrentFilter: updateCurrentFilterFunction,
    },
 });
 
-export const { addFilterType, removeFilterType, addFilterTypes } = todoSlice.actions;
+export const { addFilterType, removeFilterType, addFilterTypes, updateFilterType, updateCurrentFilter } = todoSlice.actions;
 export default todoSlice.reducer;
